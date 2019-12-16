@@ -2,6 +2,37 @@
 -Se installa express
 -npm install express-generator -g
 -Se genera la carpera con config de express
--express nombreDe carpeta 
+-express nombreDeCarpeta 
 
-2.-
+2.-Modificacion de archivo app.js
+-Se quitan las vistas
+-Se quita body parser
+
+
+3.-Se instalan las dependencias
+npm install /Dentro de carpeta --Se instalan todas las dependencias
+npm install nodemon -g
+
+-Se cambia la manera en la como se ejecuta el servidor, se cambia por nodemon
+package.json start: nodemon
+
+-->Ejecucion correcta en este punto
+
+4-Configuracion de BD
+-Se agrega la extension de mongoose, es el conector para la BD con nodeJs
+    -npm install mongoose
+-Se crea una carpeta llamada config
+-Se crea un archivo llamado database.js
+-Se exporta el modulo de la conexion para utilizarlo en la carpeta app.js
+-Al ejecutarse el archivo principal que es app.js, la bd siempre se va a conectar
+
+5-Modelos para mongoose
+-Se crea un modelo para guardar info en la BD. Se agrega los campos que tendra, asi como
+los requerimientos y especificaciones de cada uno de ellos.
+-Se crear el modelo con todas sus especificaciones y se exporta para utilizarlo en otro archivo
+
+6-Creacion de un lugar apartir del modelo
+-Se importa el modelo en el archivo app.js
+-Se crea un metodo app.post y dentro, se agrega el modelo con un metodo llamado create
+como parametro recibe un archivo JSON con toda la info necesaria para agregar el nuevo modelo a la BD
+-Dicho metodo regresa una promesa en la cual se va a regresar el obj creado o el error, en dado caos.
