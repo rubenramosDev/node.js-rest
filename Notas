@@ -1,0 +1,7 @@
+1.- Generar base con express
+-Se installa express
+-npm install express-generator -g
+-Se genera la carpera con config de express
+-express nombreDe carpeta 
+
+2.-
