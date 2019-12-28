@@ -1,40 +1,42 @@
-var createError = require('http-errors');
+//Librerias externas
 var express = require('express');
+var createError = require('http-errors');
 var path = require('path');
-var logger = require('morgan');
+var bodyParser = require('body-parser');
+const jwtMiddleware = require('express-jwt');
+
+//configuraciones
+const db = require('./config/database');
+const { jwtSecrets } = require('./config/secrets');
+
+//rutas
+const places = require('./routes/places');
+const users = require('./routes/users');
+const sessions = require('./routes/sessions');
+const favorites = require('./routes/favorites');
+const visits = require('./routes/visits');
+const visitsPlaces = require('./routes/visitsPlaces');
 
 var app = express();
-
-
-const db = require('./config/database');
 db.connect();
-
-const bodyParser = require('body-parser');
 app.use(bodyParser.json({}));
 app.use(bodyParser.urlencoded({ extended: false }));
-
-const Place = require('./models/Place');
-
-app.post('/places', (req, res) => {
-  Place.create({
-    title: req.body.title,
-    description: req.body.description,
-    acceptsCreditCard: req.body.acceptsCreditCard,
-    openHour: req.body.openHour,
-    closeHour: req.body.closeHour
-  }).then(place => {
-    res.json(place);
-  }).catch(err => {
-    //res.json(err);
-    console.log(err);
-    res.status(404).json({ err });
-  })
-});
-
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(
+  jwtMiddleware({ secret: jwtSecrets }).unless({ path: ['/sessions', '/users'], method: 'GET' }));
+
+//Indicamos al servidor que vamos a atender a estas rutas
+app.use('/places', places);
+app.use('/places', visitsPlaces);
+app.use('/users', users);
+app.use('/sessions', sessions);
+app.use('/favorites', favorites);
+app.use('/visits', visits);
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
