@@ -3,8 +3,6 @@ const Visit = require('../models/Visit');
 const paramsBuilder = require('./helpers').paramsBuilder;
 const params = ['_place', 'reaction', 'comment'];
 
-const Users = require('../models/Users');
-
 function index(req, res) {
     let promise = null;
     if (req.place) {
@@ -15,8 +13,10 @@ function index(req, res) {
 
     if (promise) {
         promise.then(visits => {
+            console.log('Por aca tambine');
             res.json(visits);
         }).catch(err => {
+            console.log(err);
             res.status(500).json(err);
         })
     } else {
@@ -24,11 +24,11 @@ function index(req, res) {
     }
 }
 
-function find(req, res, next) {
+function findVisit(req, res, next) {
     Visit.findById(req.params.visit_id)
         .then(visit => {
             req.mainObj = visit;
-            req.favorite = visit;
+            req.visit = visit;
             next();
         }).catch(next);
 }
@@ -54,5 +54,5 @@ function deleteVisit(req, res, next) {
 }
 
 module.exports = {
-    find, create, deleteVisit, index
+    findVisit, create, deleteVisit, index
 }

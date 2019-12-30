@@ -21,9 +21,11 @@ let visitSchema = new mongoose.Schema({
     }
 });
 
+//Funciones
+visitSchema.statics.forUser = function (userId, paginate) {
+    return Visit.paginate({ '_user': userId }, { page: paginate, limit: 5, sort: { '_id': -1 } });
+}
 
 visitSchema.plugin(mongoosePaginate);
-
 const Visit = mongoose.model('Visit', visitSchema);
-
 module.exports = Visit;

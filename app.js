@@ -16,6 +16,10 @@ const sessions = require('./routes/sessions');
 const favorites = require('./routes/favorites');
 const visits = require('./routes/visits');
 const visitsPlaces = require('./routes/visitsPlaces');
+const application = require('./routes/applications');
+
+const findAppBySecret = require('./middlewares/findAppBySecret');
+const authApp = require('./middlewares/authApp');
 
 var app = express();
 db.connect();
@@ -28,6 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   jwtMiddleware({ secret: jwtSecrets }).unless({ path: ['/sessions', '/users'], method: 'GET' }));
 
+app.use(findAppBySecret);
+app.use(authApp);
+
 //Indicamos al servidor que vamos a atender a estas rutas
 app.use('/places', places);
 app.use('/places', visitsPlaces);
@@ -35,6 +42,9 @@ app.use('/users', users);
 app.use('/sessions', sessions);
 app.use('/favorites', favorites);
 app.use('/visits', visits);
+app.use('/application', application);
+
+
 
 
 
